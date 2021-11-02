@@ -61,11 +61,6 @@ create table intervention(
     value BIGINT
 );
 
---ALTER TABLE ANIMAL
---ADD CONSTRAINT animal_owner_id
---FOREIGN KEY (owner_id) references owner(owner_id);
-
-
 create table animal_type_food(
     animal_type_id BIGINT AUTO_INCREMENT PRIMARY KEY,
     food_id BIGINT NOT NULL

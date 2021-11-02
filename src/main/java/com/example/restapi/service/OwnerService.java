@@ -27,6 +27,7 @@ public class OwnerService {
 
     @Cacheable(value = "owners", key = "#p0")
     public List<Owner> getOwners(int page, Sort.Direction sort) {
+        LOGGER.info("Owners fetched.");
         return ownerRepository.findAllOwners(
                 PageRequest.of(page, PAGE_SIZE,
                         Sort.by(sort, "id")
@@ -37,6 +38,7 @@ public class OwnerService {
     public Owner getSingleOwner(long id) {
         Optional<Owner> singleOwner = ownerRepository.findById(id); //.orElseThrow(NoSuchElementException::new);
         if (singleOwner.isPresent()) {
+            LOGGER.info("Owner fetched.");
             return singleOwner.get();
         } else {
             LOGGER.info("No single owner found.");
@@ -45,6 +47,7 @@ public class OwnerService {
     }
 
     public Owner addOwner(Owner owner) {
+        LOGGER.info("Owner added.");
         return ownerRepository.save(owner);
     }
 
@@ -53,6 +56,7 @@ public class OwnerService {
     public Owner editOwner(Owner owner) {
         Optional<Owner> ownerToEdit = ownerRepository.findById(owner.getId()); //.orElseThrow(NoSuchElementException::new);
         if (ownerToEdit.isPresent()) {
+            LOGGER.info("Owner edited.");
             Owner ownerEdited = ownerToEdit.get();
             ownerEdited.setFirst_name(owner.getFirst_name());
             ownerEdited.setLast_name(owner.getLast_name());
@@ -76,6 +80,7 @@ public class OwnerService {
                 animal.setOwnerId(null);
             }
             ownerRepository.deleteById(id);
+            LOGGER.info("Owner deleted.");
         } else {
             LOGGER.info("No owner found to be deleted.");
         }

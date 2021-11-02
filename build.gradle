@@ -1,0 +1,123 @@
+plugins {
+	id 'org.springframework.boot' version '2.5.5'
+	id 'io.spring.dependency-management' version '1.0.11.RELEASE'
+	id 'java'
+}
+
+group = 'com.example'
+version = '0.0.1-SNAPSHOT'
+sourceCompatibility = '1.8'
+
+configurations {
+	compileOnly {
+		extendsFrom annotationProcessor
+	}
+}
+
+
+repositories {
+	mavenCentral()
+}
+
+dependencies {
+	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+	implementation 'org.springframework.boot:spring-boot-starter-web'
+//	implementation 'org.springframework.boot:spring-boot-starter-security'
+//	implementation 'com.auth0:java-jwt:3.8.3'
+	implementation group: 'org.springframework.boot', name: 'spring-boot-starter-data-redis', version: '2.5.5'
+	implementation group: 'org.springframework.boot', name: 'spring-boot-starter-cache', version: '2.5.5'
+	implementation group: 'io.springfox', name: 'springfox-boot-starter', version: '3.0.0'
+
+	compileOnly 'org.projectlombok:lombok'
+	runtimeOnly 'com.h2database:h2'
+	annotationProcessor 'org.projectlombok:lombok'
+	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+}
+
+test {
+	useJUnitPlatform()
+}
+
+task generatePostsAndComments() {
+	doLast {
+		File dataSql = file("src/main/resources/data.sql")
+		dataSql.write("")
+		//posty
+		for (int i = 1; i <= 100; i++) {
+			dataSql.append("insert into post(id, title, content, created) " +
+					"values (${i}, 'Test post ${i}', 'Content ${i}', '"+ LocalDateTime.now().minusDays(100 - i) +"');\n")
+		}
+		//komentarze
+		for (int i = 1; i <= 100; i++) {
+			int postId = 1 + i / 10
+			dataSql.append("insert into comment(id, post_id, content, created) " +
+					"values (${i}, ${postId}, 'Comment ${i}', '"+ LocalDateTime.now().minusDays(100 - i) +"');\n")
+		}
+	}
+}
+
+task generateCustomData() {
+	doLast {
+		File dataSql = file("src/main/resources/data.sql")
+
+		FileWriter fw = new FileWriter(dataSql,true);
+		fw.write("\n")
+		//owner
+		for (int i = 1; i <= 10; i++) {
+			fw.write("insert into owner(owner_id, first_name, last_name, mobile, email, notes) " +
+					"values (${i}, 'Owner First Name ${i}', 'Owner Last Name ${i}', '"+ (int) (Math.random() * (999999999 - 100000000)) +"', '${i}test@gmail.com', '');\n")
+		}
+		fw.write("\n")
+		//animals
+		for (int i = 1; i <= 1000; i++) {
+			//int ownerId = 1 + i / 10
+			int ownerId =  i % 10
+			ownerId = ownerId == 0 ? 10 : ownerId
+			fw.write("insert into animal(animal_id, owner_id, animal_type_id, name, age, weight) " +
+					"values (${i}, ${ownerId}, ${ownerId}, 'Animal ${i}', '"+ Math.abs(new Random().nextInt() % 60) + 1 +"', '"+ Math.abs(new Random().nextInt() % 600) + 1 +"');\n")
+		}
+		fw.write("\n")
+		//animalTypes
+		for (int i = 1; i <= 10; i++) {
+			fw.write("insert into animal_type(animal_type_id, name, thumbnail) " +
+					"values (${i}, 'Animal type ${i}', 'Thumbnail ${i}');\n")
+		}
+		fw.write("\n")
+		//food
+		for (int i = 1; i <= 10; i++) {
+			fw.write("insert into food(food_id, name, value) " +
+					"values (${i}, 'Name of food ${i}', ${i});\n")
+		}
+		fw.write("\n")
+		//game
+		for (int i = 1; i <= 10; i++) {
+			fw.write("insert into game(game_id, name, value) " +
+					"values (${i}, 'Name of game ${i}', ${i});\n")
+		}
+		fw.write("\n")
+		//intervention
+		for (int i = 1; i <= 10; i++) {
+			fw.write("insert into intervention(intervention_id, name, value) " +
+					"values (${i}, 'Name of intervention ${i}', ${i});\n")
+		}
+		fw.write("\n")
+		//animal_type_food
+		for (int i = 1; i <= 10; i++) {
+			fw.write("insert into animal_type_food(animal_type_id, food_id) " +
+					"values (${i}, ${i});\n")
+		}
+		fw.write("\n")
+		//animal_type_game
+		for (int i = 1; i <= 10; i++) {
+			fw.write("insert into animal_type_game(animal_type_id, game_id) " +
+					"values (${i}, ${i});\n")
+		}
+		fw.write("\n")
+		//animal_type_intervention
+		for (int i = 1; i <= 10; i++) {
+			fw.write("insert into animal_type_intervention(animal_type_id, intervention_id) " +
+					"values (${i}, ${i});\n")
+		}
+		fw.close()
+	}
+}

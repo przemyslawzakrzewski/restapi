@@ -8,6 +8,9 @@ import javax.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.CachePut;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
@@ -20,6 +23,7 @@ public class InterventionService {
     private final InterventionRepository interventionRepository;
     private static final Logger LOGGER = LogManager.getLogger(InterventionService.class);
 
+    @Cacheable(value = "interventions", key = "#p0")
     public List<Intervention> getInterventions(int page, Sort.Direction sort) {
         return interventionRepository.findAllInterventions(
                 PageRequest.of(page, PAGE_SIZE,
@@ -27,6 +31,7 @@ public class InterventionService {
                 ));
     }
 
+    @Cacheable(value = "singleIntervention", key = "#id")
     public Intervention getSingleIntervention(long id) {
         Optional<Intervention> singleIntervention = interventionRepository.findById(id);
         if (singleIntervention.isPresent()) {
@@ -44,6 +49,7 @@ public class InterventionService {
     }
 
     @Transactional
+    @CachePut(value = "editIntervention")
     public Intervention editIntervention(Intervention intervention) {
         Optional<Intervention> interventionToEdit = interventionRepository.findById(intervention.getId());
         if (interventionToEdit.isPresent()) {
@@ -59,6 +65,7 @@ public class InterventionService {
     }
 
     @Transactional
+    @CacheEvict(value = "deleteIntervention")
     public void deleteIntervention(long id) {
         Optional<Intervention> interventionToDelete = interventionRepository.findById(id);
         if (interventionToDelete.isPresent()) {

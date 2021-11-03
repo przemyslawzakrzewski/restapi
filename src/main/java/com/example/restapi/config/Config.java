@@ -54,6 +54,46 @@ public class Config {
                 .withCacheConfiguration("editOwner",
                         RedisCacheConfiguration.defaultCacheConfig().entryTtl(Duration.ofMinutes(2)))
                 .withCacheConfiguration("deleteOwner",
+                        RedisCacheConfiguration.defaultCacheConfig().entryTtl(Duration.ofMinutes(2)))
+                .withCacheConfiguration("games",
+                        RedisCacheConfiguration.defaultCacheConfig().entryTtl(Duration.ofMinutes(2)))
+                .withCacheConfiguration("singleGame",
+                        RedisCacheConfiguration.defaultCacheConfig().entryTtl(Duration.ofMinutes(2)))
+                .withCacheConfiguration("editGame",
+                        RedisCacheConfiguration.defaultCacheConfig().entryTtl(Duration.ofMinutes(2)))
+                .withCacheConfiguration("deleteGame",
+                        RedisCacheConfiguration.defaultCacheConfig().entryTtl(Duration.ofMinutes(2)))
+                .withCacheConfiguration("interventions",
+                        RedisCacheConfiguration.defaultCacheConfig().entryTtl(Duration.ofMinutes(2)))
+                .withCacheConfiguration("singleIntervention",
+                        RedisCacheConfiguration.defaultCacheConfig().entryTtl(Duration.ofMinutes(2)))
+                .withCacheConfiguration("editIntervention",
+                        RedisCacheConfiguration.defaultCacheConfig().entryTtl(Duration.ofMinutes(2)))
+                .withCacheConfiguration("deleteIntervention",
+                        RedisCacheConfiguration.defaultCacheConfig().entryTtl(Duration.ofMinutes(2)))
+                .withCacheConfiguration("foods",
+                        RedisCacheConfiguration.defaultCacheConfig().entryTtl(Duration.ofMinutes(2)))
+                .withCacheConfiguration("singleFood",
+                        RedisCacheConfiguration.defaultCacheConfig().entryTtl(Duration.ofMinutes(2)))
+                .withCacheConfiguration("editFood",
+                        RedisCacheConfiguration.defaultCacheConfig().entryTtl(Duration.ofMinutes(2)))
+                .withCacheConfiguration("deleteFood",
+                        RedisCacheConfiguration.defaultCacheConfig().entryTtl(Duration.ofMinutes(2)))
+                .withCacheConfiguration("animals",
+                        RedisCacheConfiguration.defaultCacheConfig().entryTtl(Duration.ofMinutes(2)))
+                .withCacheConfiguration("singleAnimal",
+                        RedisCacheConfiguration.defaultCacheConfig().entryTtl(Duration.ofMinutes(2)))
+                .withCacheConfiguration("editAnimal",
+                        RedisCacheConfiguration.defaultCacheConfig().entryTtl(Duration.ofMinutes(2)))
+                .withCacheConfiguration("deleteAnimal",
+                        RedisCacheConfiguration.defaultCacheConfig().entryTtl(Duration.ofMinutes(2)))
+                .withCacheConfiguration("animalTypes",
+                        RedisCacheConfiguration.defaultCacheConfig().entryTtl(Duration.ofMinutes(2)))
+                .withCacheConfiguration("singleAnimalType",
+                        RedisCacheConfiguration.defaultCacheConfig().entryTtl(Duration.ofMinutes(2)))
+                .withCacheConfiguration("editAnimalType",
+                        RedisCacheConfiguration.defaultCacheConfig().entryTtl(Duration.ofMinutes(2)))
+                .withCacheConfiguration("deleteAnimalType",
                         RedisCacheConfiguration.defaultCacheConfig().entryTtl(Duration.ofMinutes(2)));
     }
 

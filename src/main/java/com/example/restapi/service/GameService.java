@@ -8,6 +8,9 @@ import javax.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.CachePut;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
@@ -20,6 +23,7 @@ public class GameService {
     private final GameRepository gameRepository;
     private static final Logger LOGGER = LogManager.getLogger(GameService.class);
 
+    @Cacheable(value = "games", key = "#p0")
     public List<Game> getGames(int page, Sort.Direction sort) {
         return gameRepository.findAllGames(
                 PageRequest.of(page, PAGE_SIZE,
@@ -27,6 +31,7 @@ public class GameService {
                 ));
     }
 
+    @Cacheable(value = "singleGame", key = "#id")
     public Game getSingleGame(long id) {
         Optional<Game> singleGame = gameRepository.findById(id);
         if (singleGame.isPresent()) {
@@ -44,6 +49,7 @@ public class GameService {
     }
 
     @Transactional
+    @CachePut(value = "editGame")
     public Game editGame(Game game) {
         Optional<Game> gameToEdit = gameRepository.findById(game.getId());
         if (gameToEdit.isPresent()) {
@@ -59,6 +65,7 @@ public class GameService {
     }
 
     @Transactional
+    @CacheEvict(value = "deleteGame")
     public void deleteGame(long id) {
         Optional<Game> gameToDelete = gameRepository.findById(id);
         if (gameToDelete.isPresent()) {

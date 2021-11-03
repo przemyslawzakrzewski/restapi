@@ -4,7 +4,6 @@ import com.example.restapi.model.Animal;
 import com.example.restapi.model.Owner;
 import com.example.restapi.repository.OwnerRepository;
 import java.util.List;
-import java.util.NoSuchElementException;
 import java.util.Optional;
 import javax.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -36,7 +35,7 @@ public class OwnerService {
 
     @Cacheable(value = "singleOwner", key = "#id")
     public Owner getSingleOwner(long id) {
-        Optional<Owner> singleOwner = ownerRepository.findById(id); //.orElseThrow(NoSuchElementException::new);
+        Optional<Owner> singleOwner = ownerRepository.findById(id);
         if (singleOwner.isPresent()) {
             LOGGER.info("Owner fetched.");
             return singleOwner.get();
@@ -54,7 +53,7 @@ public class OwnerService {
     @Transactional
     @CachePut(value = "editOwner")
     public Owner editOwner(Owner owner) {
-        Optional<Owner> ownerToEdit = ownerRepository.findById(owner.getId()); //.orElseThrow(NoSuchElementException::new);
+        Optional<Owner> ownerToEdit = ownerRepository.findById(owner.getId());
         if (ownerToEdit.isPresent()) {
             LOGGER.info("Owner edited.");
             Owner ownerEdited = ownerToEdit.get();
@@ -73,7 +72,7 @@ public class OwnerService {
     @Transactional
     @CacheEvict(value = "deleteOwner")
     public void deleteOwner(long id) {
-        Optional<Owner> ownerToDelete = ownerRepository.findById(id); //.orElseThrow(NoSuchElementException::new);
+        Optional<Owner> ownerToDelete = ownerRepository.findById(id);
         if (ownerToDelete.isPresent()) {
             List<Animal> animals = ownerToDelete.get().getAnimals();
             for (Animal animal : animals) {

@@ -8,6 +8,9 @@ import javax.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.CachePut;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
@@ -20,6 +23,7 @@ public class FoodService {
     private final FoodRepository foodRepository;
     private static final Logger LOGGER = LogManager.getLogger(FoodService.class);
 
+    @Cacheable(value = "foods", key = "#p0")
     public List<Food> getFoods(int page, Sort.Direction sort) {
         return foodRepository.findAllFoods(
                 PageRequest.of(page, PAGE_SIZE,
@@ -27,6 +31,7 @@ public class FoodService {
                 ));
     }
 
+    @Cacheable(value = "singleFood", key = "#id")
     public Food getSingleFood(long id) {
         Optional<Food> singleFood = foodRepository.findById(id);
         if (singleFood.isPresent()) {
@@ -44,6 +49,7 @@ public class FoodService {
     }
 
     @Transactional
+    @CachePut(value = "editFood")
     public Food editFood(Food food) {
         Optional<Food> foodToEdit = foodRepository.findById(food.getId());
         if (foodToEdit.isPresent()) {
@@ -59,6 +65,7 @@ public class FoodService {
     }
 
     @Transactional
+    @CacheEvict(value = "deleteFood")
     public void deleteFood(long id) {
         Optional<Food> foodToDelete = foodRepository.findById(id);
         if (foodToDelete.isPresent()) {
